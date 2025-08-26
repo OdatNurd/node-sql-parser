@@ -1698,7 +1698,7 @@ number_or_param
   / param
 
 limit_clause
-  = KW_LIMIT __ i1:(number_or_param) __ tail:((COMMA / KW_OFFSET) __ number_or_param)? {
+  = KW_LIMIT __ i1:(expr) __ tail:((COMMA / KW_OFFSET) __ expr)? {
       const res = [i1];
       if (tail) res.push(tail[2]);
       return {
@@ -2244,10 +2244,11 @@ primary
         return list;
     }
   / var_decl
-  / __ prepared_symbol:'?' {
+  / __ prepared_symbol:('?' [0-9]*)
+{
     return {
       type: 'origin',
-      value: prepared_symbol
+      value: prepared_symbol.join('')
     }
   }
 

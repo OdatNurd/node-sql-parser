@@ -285,4 +285,50 @@ describe('sqlite', () => {
     FROM response_sources rs`
     expect(getParsedSql(sql)).to.be.equal(`SELECT CASE WHEN "rs"."url" LIKE 'http://%' THEN SUBSTR("rs"."url", 8, INSTR(SUBSTR("rs"."url", 8), '/') - 1) WHEN "rs"."url" LIKE 'https://%' THEN SUBSTR("rs"."url", 9, INSTR(SUBSTR("rs"."url", 9), '/') - 1) ELSE SUBSTR("rs"."url", 1, INSTR("rs"."url", '/') - 1) END AS "domain", COUNT(*) AS "total_citations", COUNT(DISTINCT "mr"."model_id") AS "models_citing", COUNT(DISTINCT "mr"."response_id") AS "responses_citing", GROUP_CONCAT(DISTINCT "m"."model_name") AS "citing_models", AVG("mr"."brand_visibility_score") AS "avg_visibility_score", AVG("mr"."recommendation_quality_score") AS "avg_recommendation_quality" FROM "response_sources" AS "rs"`)
   })
+  it('should support numbered bind in SELECT WHERE clause', () => {
+    const sql = `SELECT * FROM users WHERE id = ?1`
+    expect(getParsedSql(sql)).to.be.equal(`SELECT * FROM "users" WHERE "id" = ?1`)
+  })
+
+  it('should support numbered bind in SELECT with multiple WHERE clauses', () => {
+    const sql = `SELECT * FROM users WHERE id = ?1 AND name = ?2`
+    expect(getParsedSql(sql)).to.be.equal(`SELECT * FROM "users" WHERE "id" = ?1 AND "name" = ?2`)
+  })
+
+  it('should support numbered bind in INSERT statement', () => {
+    const sql = `INSERT INTO users (id, name) VALUES (?1, ?2)`
+    expect(getParsedSql(sql)).to.be.equal(`INSERT INTO "users" (id, name) VALUES (?1,?2)`)
+  })
+
+  it('should support numbered bind in UPDATE statement', () => {
+    const sql = `UPDATE users SET name = ?1 WHERE id = ?2`
+    expect(getParsedSql(sql)).to.be.equal(`UPDATE "users" SET "name" = ?1 WHERE "id" = ?2`)
+  })
+
+  it('should support numbered bind in DELETE statement', () => {
+    const sql = `DELETE FROM users WHERE id = ?1`
+    expect(getParsedSql(sql)).to.be.equal(`DELETE FROM "users" WHERE "id" = ?1`)
+  })
+
+  it('should support numbered bind in LIMIT and OFFSET clauses', () => {
+    const sql = `SELECT * FROM users LIMIT ?1 OFFSET ?2`
+    expect(getParsedSql(sql)).to.be.equal(`SELECT * FROM "users" LIMIT ?1 OFFSET ?2`)
+  })
+
+  it('should support numbered bind in BETWEEN clause', () => {
+    const sql = `SELECT * FROM users WHERE id BETWEEN ?1 AND ?2`
+    expect(getParsedSql(sql)).to.be.equal(`SELECT * FROM "users" WHERE "id" BETWEEN ?1 AND ?2`)
+  })
+
+  it('should support numbered bind in IN clause', () => {
+    const sql = `SELECT * FROM users WHERE id IN (?1, ?2, ?3)`
+    expect(getParsedSql(sql)).to.be.equal(`SELECT * FROM "users" WHERE "id" IN (?1, ?2, ?3)`)
+  })
+
+  it('should support a complex query with multiple numbered binds', () => {
+    const sql = `
+      SELECT id, name FROM users WHERE id IN (?1, ?2) AND name LIKE ?3 ORDER BY id LIMIT ?4 OFFSET ?5
+    `
+    expect(getParsedSql(sql)).to.be.equal(`SELECT "id", "name" FROM "users" WHERE "id" IN (?1, ?2) AND "name" LIKE ?3 ORDER BY "id" ASC LIMIT ?4 OFFSET ?5`)
+  })
 })
