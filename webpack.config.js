@@ -30,10 +30,6 @@ const moduleCfg = {
                     }
                 },
             enforce: 'post',
-        },
-        {
-            test: /\.pegjs$/,
-            loader: 'pegjs-loader?dependencies={"BigInt":"big-integer"}'
         }
     ],
 }

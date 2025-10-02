@@ -63,12 +63,9 @@ importers:
       mochapack:
         specifier: ^2.0.3
         version: 2.1.5(mocha@10.8.2)(webpack@4.47.0)
-      pegjs:
-        specifier: ^0.10.0
-        version: 0.10.0
-      pegjs-loader:
-        specifier: ^0.5.6
-        version: 0.5.8(pegjs@0.10.0)(webpack@4.47.0)
+      peggy:
+        specifier: ^5.0.6
+        version: 5.0.6
       rimraf:
         specifier: ^5.0.1
         version: 5.0.10
@@ -674,6 +671,10 @@ packages:
     resolution: {integrity: sha512-1SUf/Cg2GzGDyaf15aR9St9TWlb+XvbZXWpDx8YKs7MLzMH/BCeopv+y9vzrzgkfykCGuWOlSu3mZhj2+FQcrg==}
     engines: {node: '>=10'}
     deprecated: This functionality has been moved to @npmcli/fs
+
+  '@peggyjs/from-mem@3.1.1':
+    resolution: {integrity: sha512-m5OEjgJaePWpyNtQCvRZkpLoV+z44eh6QIO9yEwQuOThdUdkECO3wcKLT3tFA3H8WM5bxU/K/dpmo7r/X16UEw==}
+    engines: {node: '>=20.8'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -1404,6 +1405,10 @@ packages:
 
   combine-source-map@0.8.0:
     resolution: {integrity: sha512-UlxQ9Vw0b/Bt/KYwCFqdEwsQ1eL8d1gibiFb7lxQJFdvTgc2hIZi6ugsg+kyhzhPV+QEpUiEIwInIAIrgoEkrg==}
+
+  commander@14.0.1:
+    resolution: {integrity: sha512-2JkV3gUZUVrbNA+1sjBOYLsMZ5cEEl8GTFP2a4AVz5hvasAMCQ1D2l2le/cX+pV4N6ZU17zjUahLpIXRrnWL8A==}
+    engines: {node: '>=20'}
 
   commander@2.17.1:
     resolution: {integrity: sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==}
@@ -2784,15 +2789,9 @@ packages:
     resolution: {integrity: sha512-Q3CG/cYvCO1ye4QKkuH7EXxs3VC/rI1/trd+qX2+PolbaKG0H+bgcZzrTt96mMyRtejk+JMCiLUn3y29W8qmFQ==}
     engines: {node: '>= 0.10'}
 
-  pegjs-loader@0.5.8:
-    resolution: {integrity: sha512-FcqC07tFiDN5kEOVcYw0wSJcHu3d6YrT2sCJM5xkNwOeTAEkk/gFcxnkJH4D/ZNfUaBLQ7fbCUwMWLFfJ/06Mg==}
-    peerDependencies:
-      pegjs: ^0.10.0
-      webpack: '>=1'
-
-  pegjs@0.10.0:
-    resolution: {integrity: sha512-qI5+oFNEGi3L5HAxDwN2LA4Gg7irF70Zs25edhjld9QemOgp0CbvMtbFcMvFtEo1OityPrcCzkQFB8JP/hxgow==}
-    engines: {node: '>=0.10'}
+  peggy@5.0.6:
+    resolution: {integrity: sha512-Sud8Zus0JAgE+U4zwkJv29OOaXhviFI7J90/6cGfy3OoqR8dpnieeF9a46dj0bTtqiFnrFatldA6ltQyOJvNmg==}
+    engines: {node: '>=20'}
     hasBin: true
 
   picocolors@1.1.1:
@@ -3152,6 +3151,10 @@ packages:
 
   source-list-map@2.0.1:
     resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==}
+
+  source-map-generator@2.0.2:
+    resolution: {integrity: sha512-unCl5BQhF/us51DiT7SvlSY3QUPhyfAdHJxd8l7FXdwzqxli0UDMV2dEuei2SeGp3Z4rB/AJ9zKi1mGOp2K2ww==}
+    engines: {node: '>=20'}
 
   source-map-resolve@0.5.3:
     resolution: {integrity: sha512-Htz+RnsXWk5+P2slx5Jh3Q66vhQj1Cllm0zvnaY98+NFx+Dv2CF/f5O/t8x+KaNdrdIAsruNzoh/KpialbqAnw==}
@@ -4390,6 +4393,10 @@ snapshots:
       mkdirp: 1.0.4
       rimraf: 3.0.2
 
+  '@peggyjs/from-mem@3.1.1':
+    dependencies:
+      semver: 7.7.2
+
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -5298,6 +5305,8 @@ snapshots:
       inline-source-map: 0.6.3
       lodash.memoize: 3.0.4
       source-map: 0.5.7
+
+  commander@14.0.1: {}
 
   commander@2.17.1: {}
 
@@ -6876,13 +6885,11 @@ snapshots:
       sha.js: 2.4.12
       to-buffer: 1.2.2
 
-  pegjs-loader@0.5.8(pegjs@0.10.0)(webpack@4.47.0):
+  peggy@5.0.6:
     dependencies:
-      loader-utils: 1.4.2
-      pegjs: 0.10.0
-      webpack: 4.47.0(webpack-cli@4.10.0)
-
-  pegjs@0.10.0: {}
+      '@peggyjs/from-mem': 3.1.1
+      commander: 14.0.1
+      source-map-generator: 2.0.2
 
   picocolors@1.1.1: {}
 
@@ -7281,6 +7288,8 @@ snapshots:
       - supports-color
 
   source-list-map@2.0.1: {}
+
+  source-map-generator@2.0.2: {}
 
   source-map-resolve@0.5.3:
     dependencies:

@@ -1,5 +1,5 @@
-import { parse as sqlite } from '../pegjs/sqlite.pegjs'
+const sqliteParser = require('../build/sqlite.js');
 
-export default {
-  sqlite,
-}
+module.exports = {
+  sqlite: (sql, opt) => sqliteParser.parse(sql, opt)
+};

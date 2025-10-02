@@ -1,5 +1,5 @@
-import { parse } from '../pegjs/sqlite.pegjs'
+import parser from '../build/sqlite.js'
 
 export default {
-  [PARSER_NAME] : parse,
+  [PARSER_NAME]: (sql, opt) => parser.parse(sql, opt),
 }
