@@ -119,14 +119,13 @@ function columnOption(definition) {
     const { type, value } = defaultOpt
     columnOpt.push(type.toUpperCase(), exprToSQL(value))
   }
-  const { database } = getParserOpt()
   if (constraint) columnOpt.push(toUpper(constraint.keyword), literalToSQL(constraint.constraint))
   columnOpt.push(constraintDefinitionToSQL(check))
   columnOpt.push(generatedExpressionToSQL(generated))
   if (generated) columnOpt.push(nullSQL)
   columnOpt.push(autoIncrementToSQL(autoIncrement), toUpper(primaryKey), toUpper(uniqueKey), literalToSQL(generateByDefault), commentToSQL(comment))
   columnOpt.push(...commonTypeValue(characterSet))
-  if (database.toLowerCase() !== 'sqlite') columnOpt.push(exprToSQL(collate))
+  // if (database.toLowerCase() !== 'sqlite') columnOpt.push(exprToSQL(collate))
   columnOpt.push(...commonTypeValue(columnFormat))
   columnOpt.push(...commonTypeValue(storage))
   columnOpt.push(...columnReferenceDefinitionToSQL(referenceDefinition))

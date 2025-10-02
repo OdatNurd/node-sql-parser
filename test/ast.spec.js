@@ -7,9 +7,8 @@ const { multipleToSQL } = require('../src/union')
 describe('AST', () => {
     const parser = new Parser();
     let sql;
-    const DEFAULT_OPT =  { database: 'sqlite' }
 
-    function getParsedSql(sql, opt = DEFAULT_OPT) {
+    function getParsedSql(sql, opt = {}) {
         const ast = parser.astify(sql, opt);
         return parser.sqlify(ast, opt);
     }
@@ -247,17 +246,14 @@ describe('AST', () => {
                         'SELECT (salary + bonus)::BIGINT AS "comp" FROM "employee"'
                     ]
                 }
-                const opt = {
-                    database: 'sqlite'
-                }
                 Object.keys(castQueries).forEach(cast => {
                     const [inputQuery, expectedQuery] = castQueries[cast];
-                    expect(parser.sqlify(parser.astify(inputQuery, opt))).to.equal(expectedQuery);
+                    expect(parser.sqlify(parser.astify(inputQuery, {}))).to.equal(expectedQuery);
                 });
             })
 
             it.skip('should support hive cast as string', () => {
-                expect(getParsedSql(`select abc from t1 where cast(abc as string) = "123"`, { database: 'sqlite' }))
+                expect(getParsedSql(`select abc from t1 where cast(abc as string) = "123"`))
                     .to.equal('SELECT `abc` FROM `t1` WHERE CAST(`abc` AS STRING) = "123"')
             })
 
@@ -354,12 +350,9 @@ describe('AST', () => {
 
         describe('date function', () => {
             it.skip('should interval string', () => {
-                const opt = {
-                    database: 'sqlite'
-                }
-                expect(getParsedSql("SELECT NOW() - INTERVAL '7 DAY'", opt))
+                expect(getParsedSql("SELECT NOW() - INTERVAL '7 DAY'", {}))
                 .to.equal("SELECT NOW() - INTERVAL '7 DAY'");
-                expect(getParsedSql("SELECT NOW() - INTERVAL 7 DAY", opt))
+                expect(getParsedSql("SELECT NOW() - INTERVAL 7 DAY", {}))
                     .to.equal("SELECT NOW() - INTERVAL 7 DAY");
             })
 
@@ -626,12 +619,12 @@ describe('AST', () => {
 
             it.skip('should work db2 fetch', () => {
                 sql = "select col1, col2 from library.tablename where col1 = 'foo' fetch first 5 rows only";
-                expect(getParsedSql(sql, {database: 'sqlite'})).to.equal("SELECT col1, col2 FROM library.tablename WHERE col1 = 'foo' FETCH FIRST 5 ROWS ONLY");
+                expect(getParsedSql(sql, {})).to.equal("SELECT col1, col2 FROM library.tablename WHERE col1 = 'foo' FETCH FIRST 5 ROWS ONLY");
             });
 
             it.skip('should work db2 fetch offset', () => {
                 sql = "select col1, col2 from library.tablename where col1 = 'foo' offset 10 rows fetch next 5 rows only";
-                expect(getParsedSql(sql, {database: 'sqlite'})).to.equal("SELECT col1, col2 FROM library.tablename WHERE col1 = 'foo' OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY");
+                expect(getParsedSql(sql, {})).to.equal("SELECT col1, col2 FROM library.tablename WHERE col1 = 'foo' OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY");
             });
         });
 
@@ -1247,9 +1240,8 @@ describe('AST', () => {
     describe('transactsql', () => {
         it.skip('should support basic parser select', () => {
             const sql = `SELECT col, col2 FROM dba.schemab.tbl_c`
-            const opt = { database: 'sqlite' }
-            const ast = parser.astify(sql, opt)
-            const backSQL = parser.sqlify(ast, opt)
+            const ast = parser.astify(sql, {})
+            const backSQL = parser.sqlify(ast, {})
             expect(backSQL).to.equals(`SELECT "col", "col2" FROM "dba"."schemab"."tbl_c"`)
         })
     })
@@ -1303,9 +1295,8 @@ describe('AST', () => {
           FROM company
           WHERE company.categories ->> 'items' ILIKE '%Health Care%'
           OR company.categories ->> 'items' ILIKE '%Health & Wellness%'`
-        const option = { database: 'sqlite' }
-        const ast = parser.astify(sql, option)
-        expect(parser.sqlify(ast, option)).to.be.equal(`SELECT "company".name FROM "company" WHERE "company".categories ->> 'items' ILIKE '%Health Care%' OR "company".categories ->> 'items' ILIKE '%Health & Wellness%'`)
+        const ast = parser.astify(sql, {})
+        expect(parser.sqlify(ast, {})).to.be.equal(`SELECT "company".name FROM "company" WHERE "company".categories ->> 'items' ILIKE '%Health Care%' OR "company".categories ->> 'items' ILIKE '%Health & Wellness%'`)
         expect(ast.where).to.be.eql({
           "type": "binary_expr",
           "operator": "OR",

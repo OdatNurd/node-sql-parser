@@ -1,6 +1,6 @@
 import { columnToSQL, getDual } from './column'
 import { exprToSQL } from './expr'
-import parsers from './parser.all'
+import sqliteParser from '../build/sqlite.js'
 import astToSQL from './sql'
 import { DEFAULT_OPT, setParserOpt } from './util'
 
@@ -28,11 +28,15 @@ class Parser {
   }
 
   parse(sql, opt = DEFAULT_OPT) {
-    const { database = (PARSER_NAME || 'sqlite') } = opt
+    // Forbid anything from specifying a database option, since we're trying to
+    // get the code into a state where it does not need this, since it supports
+    // only a single dialect.
+    if (opt && opt.database) {
+      throw new Error(`The 'database' option is deprecated. Found with SQL: ${sql}`);
+    }
+
     setParserOpt(opt)
-    const typeCase = database.toLowerCase()
-    if (parsers[typeCase]) return parsers[typeCase](opt.trimQuery === false ? sql : sql.trim(), opt.parseOptions || DEFAULT_OPT.parseOptions)
-    throw new Error(`${database} is not supported currently`)
+    return sqliteParser.parse(opt.trimQuery === false ? sql : sql.trim(), opt.parseOptions || DEFAULT_OPT.parseOptions)
   }
 
   whiteListCheck(sql, whiteList, opt = DEFAULT_OPT) {

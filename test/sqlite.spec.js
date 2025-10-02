@@ -3,9 +3,8 @@ const Parser = require('../src/parser').default
 
 describe('sqlite', () => {
   const parser = new Parser();
-  const DEFAULT_OPT =  { database: 'sqlite' }
 
-  function getParsedSql(sql, opt = DEFAULT_OPT) {
+  function getParsedSql(sql, opt = { }) {
     const ast = parser.astify(sql, opt);
     return parser.sqlify(ast, opt);
   }

@@ -9,12 +9,6 @@ describe('MariaDB Command SQL', () => {
     return parser.sqlify(ast, opt);
   }
 
-  it('unknow database', () => {
-    const sql = 'select id from db.abc'
-    const opt = { database: 'unknownDB' }
-    expect(parser.parse.bind(parser, sql, opt)).to.throw(`${opt.database} is not supported currently`)
-  })
-
   describe('blank line or whitespace auto remove', () => {
     const sql = `
 
@@ -33,11 +27,11 @@ describe('MariaDB Command SQL', () => {
   describe('different quota based on database', () => {
     const sql = 'select id, "name" from db.abc'
     it('support pg to double quote', () => {
-      expect(getParsedSql(sql, { database: 'sqlite'})).to.equal('SELECT "id", "name" FROM "db"."abc"')
+      expect(getParsedSql(sql, { })).to.equal('SELECT "id", "name" FROM "db"."abc"')
     })
 
     it('support mariadb quote', () => {
-      expect(getParsedSql(sql, { database: 'sqlite'})).to.equal('SELECT "id", "name" FROM "db"."abc"')
+      expect(getParsedSql(sql, { })).to.equal('SELECT "id", "name" FROM "db"."abc"')
     })
   })
 })

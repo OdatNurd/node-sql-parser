@@ -221,7 +221,7 @@ describe('update', () => {
 
   it('should support parse pg update returning', () => {
     const sql = 'update account set id = 1 where name = "abc" returning id'
-    const ast = parser.astify(sql, { database: 'sqlite' })
+    const ast = parser.astify(sql, { })
     const backSQL = parser.sqlify(ast)
     expect(backSQL).to.be.equal('UPDATE "account" SET "id" = 1 WHERE "name" = "abc" RETURNING "id"')
   })
@@ -239,8 +239,8 @@ describe('update', () => {
     ])
   })
   it('should parse update statement', () => {
-    sql = `UPDATE empdb.employees t1 INNER JOIN (select t2.percentage,t2.performance from empdb.merits t2) as t3 ON t1.performance = t3.performance SET t1.salary = t1.salary + t1.salary * t3.percentage;`
-    ast = parser.parse(sql)
+    let sql = `UPDATE empdb.employees t1 INNER JOIN (select t2.percentage,t2.performance from empdb.merits t2) as t3 ON t1.performance = t3.performance SET t1.salary = t1.salary + t1.salary * t3.percentage;`
+    let ast = parser.parse(sql)
     expect(ast.tableList).to.eql(["select::empdb::merits", "update::empdb::employees"])
     expect(ast.columnList).to.eql([
       "select::merits::percentage",

@@ -5,15 +5,8 @@ const { columnOrderListToSQL } = require('../src/util')
 
 describe('create', () => {
   const parser = new Parser();
-  const DEFAULT_OPT = {
-    database: 'sqlite'
-  }
 
-  const PG_OPT = {
-    database: 'sqlite'
-  }
-
-  function getParsedSql(sql, opt = DEFAULT_OPT) {
+  function getParsedSql(sql, opt = {}) {
     const ast = parser.astify(sql, opt);
     return parser.sqlify(ast, opt);
   }
@@ -192,10 +185,7 @@ describe('create', () => {
         (
           [segment_id], [user_id] desc, [archived]
         );`
-        const opt = {
-          database: 'sqlite'
-        }
-        expect(getParsedSql(sql, opt))
+        expect(getParsedSql(sql, {}))
             .to.equal('CREATE INDEX [ix_class_segment_progress_segment_id_user_id_archived] ON [class_segment_progress] ([segment_id], [user_id] DESC, [archived])');
       });
 
@@ -263,7 +253,7 @@ describe('create', () => {
         //     LastName varchar(255) NOT NULL,
         //     FirstName varchar(255),
         //     Age int CHECK (Age >= 18),
-        //   )`, { database: 'sqlite' }))
+        //   )`, {  }))
         //   .to.equal(`CREATE TABLE [Persons] ([ID] INT NOT NULL, [LastName] VARCHAR(255) NOT NULL, [FirstName] VARCHAR(255), [Age] INT CHECK ([Age] >= 18))`);
           expect(getParsedSql(`CREATE TABLE Persons (
             ID int NOT NULL,
@@ -355,8 +345,8 @@ describe('create', () => {
 
     describe('create table using pg', () => {
       it.skip('supports basic things', () => {
-        expect(getParsedSql(`CREATE TABLE foo (id uuid)`, { database: 'sqlite' })).to.equal('CREATE TABLE "foo" (id UUID)')
-        expect(getParsedSql(`CREATE TABLE foo (value text unique)`, { database: 'sqlite' })).to.equal('CREATE TABLE "foo" (value TEXT UNIQUE)')
+        expect(getParsedSql(`CREATE TABLE foo (id uuid)`, { })).to.equal('CREATE TABLE "foo" (id UUID)')
+        expect(getParsedSql(`CREATE TABLE foo (value text unique)`, { })).to.equal('CREATE TABLE "foo" (value TEXT UNIQUE)')
         expect(getParsedSql(`CREATE TABLE accounts (
           id UUID DEFAULT uuid_generate_v4() NOT NULL,
           email TEXT NOT NULL,
@@ -366,7 +356,7 @@ describe('create', () => {
           updated_at TIMESTAMP NULL,
 
           PRIMARY KEY (id)
-        );`, { database: 'sqlite' })).to.equal('CREATE TABLE "accounts" (id UUID NOT NULL DEFAULT uuid_generate_v4(), email TEXT NOT NULL, password TEXT NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT NOW(), updated_at TIMESTAMP NULL, PRIMARY KEY (id))');
+        );`, { })).to.equal('CREATE TABLE "accounts" (id UUID NOT NULL DEFAULT uuid_generate_v4(), email TEXT NOT NULL, password TEXT NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT NOW(), updated_at TIMESTAMP NULL, PRIMARY KEY (id))');
       })
 
       it.skip('should support pg bool/boolean type', () => {
@@ -376,14 +366,14 @@ describe('create', () => {
             "status" boolean default 't',
             "is_deleted" bool null,
             "is_man" boolean not null default 'f'
-        );`, PG_OPT)).to.equal(`CREATE TABLE "foos" ("Id" VARCHAR(25) NOT NULL, "status" BOOLEAN DEFAULT 't', "is_deleted" BOOL NULL, "is_man" BOOLEAN NOT NULL DEFAULT 'f')`)
+        );`, {})).to.equal(`CREATE TABLE "foos" ("Id" VARCHAR(25) NOT NULL, "status" BOOLEAN DEFAULT 't', "is_deleted" BOOL NULL, "is_man" BOOLEAN NOT NULL DEFAULT 'f')`)
       })
       it.skip('should support pg time length type', () => {
         expect(getParsedSql(`CREATE TABLE "foos"
         (
             "Id" varchar(25) not null,
             "TIME" time(7) null
-        );`, PG_OPT)).to.equal(`CREATE TABLE "foos" ("Id" VARCHAR(25) NOT NULL, "TIME" TIME(7) NULL)`)
+        );`, {})).to.equal(`CREATE TABLE "foos" ("Id" VARCHAR(25) NOT NULL, "TIME" TIME(7) NULL)`)
       })
     })
 
@@ -443,7 +433,7 @@ describe('create', () => {
       indexSQLList.forEach(indexSQL => {
         const { description, origin, sqlify } = indexSQL
         it.skip(description, () => {
-          expect(getParsedSql(origin, PG_OPT)).to.equal(sqlify)
+          expect(getParsedSql(origin, {})).to.equal(sqlify)
         })
       })
     })
@@ -453,7 +443,7 @@ describe('create', () => {
         expect(getParsedSql(`CREATE TRIGGER check_update
         BEFORE INSERT ON accounts
         FOR EACH ROW
-        EXECUTE PROCEDURE check_account_update();`, PG_OPT)).to.equal('CREATE TRIGGER "check_update" BEFORE INSERT ON "accounts" FOR EACH ROW EXECUTE PROCEDURE check_account_update()')
+        EXECUTE PROCEDURE check_account_update();`, {})).to.equal('CREATE TRIGGER "check_update" BEFORE INSERT ON "accounts" FOR EACH ROW EXECUTE PROCEDURE check_account_update()')
       })
       it.skip('should support trigger with when expression', () => {
         expect(getParsedSql(`CREATE TRIGGER check_update
@@ -461,7 +451,7 @@ describe('create', () => {
         NOT DEFERRABLE INITIALLY DEFERRED
         FOR EACH ROW
         WHEN (OLD.balance IS DISTINCT FROM NEW.balance)
-        EXECUTE PROCEDURE check_account_update();`, PG_OPT)).to.equal('CREATE TRIGGER "check_update" BEFORE DELETE ON "accounts" NOT DEFERRABLE INITIALLY DEFERRED FOR EACH ROW WHEN "OLD".balance IS DISTINCT FROM "NEW"."balance" EXECUTE PROCEDURE check_account_update()')
+        EXECUTE PROCEDURE check_account_update();`, {})).to.equal('CREATE TRIGGER "check_update" BEFORE DELETE ON "accounts" NOT DEFERRABLE INITIALLY DEFERRED FOR EACH ROW WHEN "OLD".balance IS DISTINCT FROM "NEW"."balance" EXECUTE PROCEDURE check_account_update()')
       })
       it.skip('should support trigger with when expression with * and deferrable', () => {
         expect(getParsedSql(`CREATE TRIGGER log_update
@@ -470,30 +460,30 @@ describe('create', () => {
         DEFERRABLE INITIALLY IMMEDIATE
         FOR EACH ROW
         WHEN (OLD.* IS DISTINCT FROM NEW.*)
-        EXECUTE PROCEDURE log_account_update();`, PG_OPT)).to.equal('CREATE TRIGGER "log_update" AFTER TRUNCATE ON "accounts" FROM "bank"."accounts" DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW WHEN "OLD".* IS DISTINCT FROM "NEW".* EXECUTE PROCEDURE log_account_update()')
+        EXECUTE PROCEDURE log_account_update();`, {})).to.equal('CREATE TRIGGER "log_update" AFTER TRUNCATE ON "accounts" FROM "bank"."accounts" DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW WHEN "OLD".* IS DISTINCT FROM "NEW".* EXECUTE PROCEDURE log_account_update()')
       })
       it.skip('should support trigger with update of', () => {
         expect(getParsedSql(`CREATE TRIGGER log_update
         AFTER UPDATE OF user, name, salary OR INSERT ON accounts
         DEFERRABLE INITIALLY IMMEDIATE
         WHEN (OLD.* IS DISTINCT FROM NEW.*)
-        EXECUTE PROCEDURE log_account_update();`, PG_OPT)).to.equal('CREATE TRIGGER "log_update" AFTER UPDATE OF user, name, salary OR INSERT ON "accounts" DEFERRABLE INITIALLY IMMEDIATE WHEN "OLD".* IS DISTINCT FROM "NEW".* EXECUTE PROCEDURE log_account_update()')
+        EXECUTE PROCEDURE log_account_update();`, {})).to.equal('CREATE TRIGGER "log_update" AFTER UPDATE OF user, name, salary OR INSERT ON "accounts" DEFERRABLE INITIALLY IMMEDIATE WHEN "OLD".* IS DISTINCT FROM "NEW".* EXECUTE PROCEDURE log_account_update()')
       })
     })
   })
 
   describe('create extension pg', () => {
     it.skip('should support basic extension', () => {
-      expect(getParsedSql(`CREATE EXTENSION hstore;`, PG_OPT)).to.equal('CREATE EXTENSION hstore')
+      expect(getParsedSql(`CREATE EXTENSION hstore;`, {})).to.equal('CREATE EXTENSION hstore')
     })
     it.skip('should support create extension if not exists', () => {
-      expect(getParsedSql(`CREATE EXTENSION if not exists hstore SCHEMA public FROM unpackaged;`, PG_OPT)).to.equal('CREATE EXTENSION IF NOT EXISTS hstore SCHEMA public FROM unpackaged')
+      expect(getParsedSql(`CREATE EXTENSION if not exists hstore SCHEMA public FROM unpackaged;`, {})).to.equal('CREATE EXTENSION IF NOT EXISTS hstore SCHEMA public FROM unpackaged')
     })
     it.skip('should support create extension with version', () => {
-      expect(getParsedSql(`CREATE EXTENSION if not exists hstore with SCHEMA public version latested FROM unpackaged;`, PG_OPT)).to.equal('CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public VERSION latested FROM unpackaged')
+      expect(getParsedSql(`CREATE EXTENSION if not exists hstore with SCHEMA public version latested FROM unpackaged;`, {})).to.equal('CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public VERSION latested FROM unpackaged')
     })
     it.skip('should support create extension literal string version ', () => {
-      expect(getParsedSql(`CREATE EXTENSION if not exists hstore SCHEMA public version "latest" FROM unpackaged;`, PG_OPT)).to.equal('CREATE EXTENSION IF NOT EXISTS hstore SCHEMA public VERSION "latest" FROM unpackaged')
+      expect(getParsedSql(`CREATE EXTENSION if not exists hstore SCHEMA public version "latest" FROM unpackaged;`, {})).to.equal('CREATE EXTENSION IF NOT EXISTS hstore SCHEMA public VERSION "latest" FROM unpackaged')
     })
   })
 
@@ -507,7 +497,7 @@ describe('create', () => {
         nvc nvarchar(200) not null,
         nvcm nvarchar(max) not null,
         created_at datetime NOT NULL DEFAULT GETDATE()
-      )`, { database: 'sqlite' })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY PRIMARY KEY, [title] VARCHAR(100) NOT NULL, [uuid] UNIQUEIDENTIFIER NOT NULL DEFAULT (NEWID()) UNIQUE, [nc] NCHAR(123) NOT NULL, [nvc] NVARCHAR(200) NOT NULL, [nvcm] NVARCHAR(max) NOT NULL, [created_at] DATETIME NOT NULL DEFAULT GETDATE())')
+      )`, { })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY PRIMARY KEY, [title] VARCHAR(100) NOT NULL, [uuid] UNIQUEIDENTIFIER NOT NULL DEFAULT (NEWID()) UNIQUE, [nc] NCHAR(123) NOT NULL, [nvc] NVARCHAR(200) NOT NULL, [nvcm] NVARCHAR(max) NOT NULL, [created_at] DATETIME NOT NULL DEFAULT GETDATE())')
     })
     it.skip('should support identity without number', () => {
       expect(getParsedSql(`CREATE TABLE test (
@@ -517,19 +507,19 @@ describe('create', () => {
         [nc] nchar(123) not null,
         [nvc] nvarchar(200) not null,
         [nvcm] nvarchar(max) not null
-      )`, { database: 'sqlite' })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY PRIMARY KEY, [title] VARCHAR(100) NOT NULL, [uuid] UNIQUEIDENTIFIER NOT NULL DEFAULT (NEWID()) UNIQUE, [nc] NCHAR(123) NOT NULL, [nvc] NVARCHAR(200) NOT NULL, [nvcm] NVARCHAR(max) NOT NULL)')
+      )`, { })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY PRIMARY KEY, [title] VARCHAR(100) NOT NULL, [uuid] UNIQUEIDENTIFIER NOT NULL DEFAULT (NEWID()) UNIQUE, [nc] NCHAR(123) NOT NULL, [nvc] NVARCHAR(200) NOT NULL, [nvcm] NVARCHAR(max) NOT NULL)')
     })
     it.skip('should support identity with seed and increment', () => {
       expect(getParsedSql(`CREATE TABLE test (
         id BIGINT NOT NULL IDENTITY(1,2) PRIMARY KEY,
         title VARCHAR(100) NOT NULL
-      )`, { database: 'sqlite' })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 2) PRIMARY KEY, [title] VARCHAR(100) NOT NULL)')
+      )`, { })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 2) PRIMARY KEY, [title] VARCHAR(100) NOT NULL)')
     })
     it.skip('should support identity with seed and increment', () => {
       expect(getParsedSql(`CREATE TABLE test (
         id BIGINT NOT NULL PRIMARY KEY IDENTITY(1,2),
         title VARCHAR(100) NOT NULL
-      )`, { database: 'sqlite' })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 2) PRIMARY KEY, [title] VARCHAR(100) NOT NULL)')
+      )`, { })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 2) PRIMARY KEY, [title] VARCHAR(100) NOT NULL)')
     })
     it.skip('should support create column as ', () => {
       expect(getParsedSql(`CREATE TABLE test (
@@ -537,13 +527,13 @@ describe('create', () => {
         questions_correct BIGINT NOT NULL DEFAULT(0),
         questions_total BIGINT NOT NULL,
         score AS (questions_correct * 100 / questions_total)
-      );`, { database: 'sqlite' })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, [questions_correct] BIGINT NOT NULL DEFAULT (0), [questions_total] BIGINT NOT NULL, [score] AS ([questions_correct] * 100 / [questions_total]))')
+      );`, { })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, [questions_correct] BIGINT NOT NULL DEFAULT (0), [questions_total] BIGINT NOT NULL, [score] AS ([questions_correct] * 100 / [questions_total]))')
       expect(getParsedSql(`CREATE TABLE test (
         id BIGINT NOT NULL PRIMARY KEY IDENTITY(1, 1),
         questions_correct BIGINT NOT NULL DEFAULT(0),
         questions_total BIGINT NOT NULL,
         score AS questions_correct * 100 / questions_total
-      );`, { database: 'sqlite' })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, [questions_correct] BIGINT NOT NULL DEFAULT (0), [questions_total] BIGINT NOT NULL, [score] AS [questions_correct] * 100 / [questions_total])')
+      );`, { })).to.equal('CREATE TABLE [test] ([id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, [questions_correct] BIGINT NOT NULL DEFAULT (0), [questions_total] BIGINT NOT NULL, [score] AS [questions_correct] * 100 / [questions_total])')
     })
     it.skip('should support bracket around data type', () => {
       expect(getParsedSql(`CREATE TABLE [dbo].[foo]
@@ -553,35 +543,35 @@ describe('create', () => {
           [test] [real] NULL,
           [gmt_modified] [time](7) NULL,
           [abc] [UNIQUEIDENTIFIER] null,
-      );`, { database: 'sqlite' })).to.equal('CREATE TABLE [dbo].[foo] ([Id] NVARCHAR(25) NOT NULL, [name] NCHAR(123) NOT NULL, [test] REAL NULL, [gmt_modified] TIME(7) NULL, [abc] UNIQUEIDENTIFIER NULL)')
+      );`, { })).to.equal('CREATE TABLE [dbo].[foo] ([Id] NVARCHAR(25) NOT NULL, [name] NCHAR(123) NOT NULL, [test] REAL NULL, [gmt_modified] TIME(7) NULL, [abc] UNIQUEIDENTIFIER NULL)')
     })
   })
 
   describe('create index with tsql', () => {
     it('should support a nonclustered index on a table or view', () => {
-      expect(getParsedSql('CREATE INDEX i1 ON t1 (col1, col2 DESC);', { database: 'sqlite' })).to.equal('CREATE INDEX "i1" ON "t1" ("col1", "col2" DESC)')
+      expect(getParsedSql('CREATE INDEX i1 ON t1 (col1, col2 DESC);', { })).to.equal('CREATE INDEX "i1" ON "t1" ("col1", "col2" DESC)')
     })
 
     it.skip('should suport create a clustered, unique, nonclustered', () => {
-      expect(getParsedSql('CREATE CLUSTERED INDEX i1 ON d1.s1.t1 (col1);', { database: 'sqlite' })).to.equal('CREATE CLUSTERED INDEX [i1] ON [d1].[s1].[t1] ([col1])')
-      expect(getParsedSql('CREATE UNIQUE INDEX i1 ON t1 (col1 DESC, col2 ASC, col3 DESC);', { database: 'sqlite' })).to.equal('CREATE UNIQUE INDEX [i1] ON [t1] ([col1] DESC, [col2] ASC, [col3] DESC)')
-      expect(getParsedSql('CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]);', { database: 'sqlite' })).to.equal('CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col])')
+      expect(getParsedSql('CREATE CLUSTERED INDEX i1 ON d1.s1.t1 (col1);', { })).to.equal('CREATE CLUSTERED INDEX [i1] ON [d1].[s1].[t1] ([col1])')
+      expect(getParsedSql('CREATE UNIQUE INDEX i1 ON t1 (col1 DESC, col2 ASC, col3 DESC);', { })).to.equal('CREATE UNIQUE INDEX [i1] ON [t1] ([col1] DESC, [col2] ASC, [col3] DESC)')
+      expect(getParsedSql('CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]);', { })).to.equal('CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col])')
     })
 
     it.skip('should support include', () => {
-      expect(getParsedSql('CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2);', { database: 'sqlite' })).to.equal('CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2])')
+      expect(getParsedSql('CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2);', { })).to.equal('CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2])')
     })
 
     it.skip('should support include and where', () => {
-      expect(getParsedSql("CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2) where StartDate > '20000101' AND EndDate <= '20000630' and ComponentID IN (533, 324, 753) and EndDate IS NOT NULL;", { database: 'sqlite' })).to.equal("CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2]) WHERE [StartDate] > '20000101' AND [EndDate] <= '20000630' AND [ComponentID] IN (533, 324, 753) AND [EndDate] IS NOT NULL")
+      expect(getParsedSql("CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2) where StartDate > '20000101' AND EndDate <= '20000630' and ComponentID IN (533, 324, 753) and EndDate IS NOT NULL;", { })).to.equal("CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2]) WHERE [StartDate] > '20000101' AND [EndDate] <= '20000630' AND [ComponentID] IN (533, 324, 753) AND [EndDate] IS NOT NULL")
     })
 
     it.skip('should support include and where', () => {
-      expect(getParsedSql("CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2) where StartDate > '20000101' AND EndDate <= '20000630' and ComponentID IN (533, 324, 753) and EndDate IS NOT NULL with (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 8));", { database: 'sqlite' })).to.equal("CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2]) WHERE [StartDate] > '20000101' AND [EndDate] <= '20000630' AND [ComponentID] IN (533, 324, 753) AND [EndDate] IS NOT NULL WITH (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 6))")
+      expect(getParsedSql("CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2) where StartDate > '20000101' AND EndDate <= '20000630' and ComponentID IN (533, 324, 753) and EndDate IS NOT NULL with (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 8));", { })).to.equal("CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2]) WHERE [StartDate] > '20000101' AND [EndDate] <= '20000630' AND [ComponentID] IN (533, 324, 753) AND [EndDate] IS NOT NULL WITH (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 6))")
     })
 
     it.skip('should support include and where', () => {
-      expect(getParsedSql("CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2) where StartDate > '20000101' AND EndDate <= '20000630' and ComponentID IN (533, 324, 753) and EndDate IS NOT NULL with (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 8)) on pn(abc) FILESTREAM_ON filename;", { database: 'sqlite' })).to.equal("CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2]) WHERE [StartDate] > '20000101' AND [EndDate] <= '20000630' AND [ComponentID] IN (533, 324, 753) AND [EndDate] IS NOT NULL WITH (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 6)) ON pn([abc]) FILESTREAM_ON filename")
+      expect(getParsedSql("CREATE NONCLUSTERED INDEX ix_test ON [test] ([test_col]) include (test_col, test_col2) where StartDate > '20000101' AND EndDate <= '20000630' and ComponentID IN (533, 324, 753) and EndDate IS NOT NULL with (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 8)) on pn(abc) FILESTREAM_ON filename;", { })).to.equal("CREATE NONCLUSTERED INDEX [ix_test] ON [test] ([test_col]) INCLUDE ([test_col], [test_col2]) WHERE [StartDate] > '20000101' AND [EndDate] <= '20000630' AND [ComponentID] IN (533, 324, 753) AND [EndDate] IS NOT NULL WITH (DATA_COMPRESSION = ROW ON PARTITIONS (2, 4, 6 TO 6)) ON pn([abc]) FILESTREAM_ON filename")
     })
 
     it.skip('should return undefined for empty index columns', () => {

@@ -55,12 +55,9 @@ describe('Command SQL', () => {
     })
 
     it.skip('should support drop procedure in tsql', () => {
-      const opt = {
-        database: 'sqlite'
-      }
-      expect(getParsedSql('drop procedure [test]', opt))
+      expect(getParsedSql('drop procedure [test]', {}))
           .to.equal('DROP PROCEDURE [test]')
-      expect(getParsedSql('drop procedure test', opt))
+      expect(getParsedSql('drop procedure test', {}))
           .to.equal('DROP PROCEDURE [test]')
     })
 
@@ -238,7 +235,7 @@ describe('Command SQL', () => {
         expect(getParsedSql(`alter table a drop ${keyword}xxx, drop ${keyword}yyy`))
         .to.equal(`ALTER TABLE "a" DROP ${keyword}"xxx", DROP ${keyword}"yyy"`);
       })
-      expect(getParsedSql(`alter table a drop constraint xxx`, { database: 'sqlite' }))
+      expect(getParsedSql(`alter table a drop constraint xxx`, { }))
         .to.equal('ALTER TABLE "a" DROP CONSTRAINT "xxx"');
     });
 
@@ -250,27 +247,21 @@ describe('Command SQL', () => {
     })
 
     it('should support alter add constraint check', () => {
-      const opt = {
-        database: 'sqlite'
-      }
       expect(getParsedSql(`ALTER TABLE Persons ADD CHECK (Age>=18)`))
         .to.equal('ALTER TABLE "Persons" ADD CHECK ("Age" >= 18)');
       expect(getParsedSql(`ALTER TABLE Persons ADD CONSTRAINT CHK_PersonAge CHECK (Age>=18 AND City='Sandnes');`))
         .to.equal('ALTER TABLE "Persons" ADD CONSTRAINT "CHK_PersonAge" CHECK ("Age" >= 18 AND "City" = \'Sandnes\')');
-      expect(getParsedSql(`ALTER TABLE Persons ADD CHECK (Age>=18)`, opt))
+      expect(getParsedSql(`ALTER TABLE Persons ADD CHECK (Age>=18)`, {}))
         .to.equal('ALTER TABLE "Persons" ADD CHECK ("Age" >= 18)');
-      expect(getParsedSql(`ALTER TABLE Persons ADD CONSTRAINT CHK_PersonAge CHECK (Age>=18 AND City='Sandnes')`, opt))
-      // expect(getParsedSql('ALTER TABLE "test" alter COLUMN "a" NVARCHAR(MAX) NOT NULL;', opt))
+      expect(getParsedSql(`ALTER TABLE Persons ADD CONSTRAINT CHK_PersonAge CHECK (Age>=18 AND City='Sandnes')`, {}))
+      // expect(getParsedSql('ALTER TABLE "test" alter COLUMN "a" NVARCHAR(MAX) NOT NULL;', {}))
       //   .to.equal('ALTER TABLE "test" ALTER COLUMN "a" NVARCHAR(max) NOT NULL');
     })
 
     it.skip('should support enable and disable check constraint', () => {
-      const opt = {
-        database: 'sqlite'
-      }
-      expect(getParsedSql(`ALTER TABLE Persons with check check constraint check_salary`, opt))
+      expect(getParsedSql(`ALTER TABLE Persons with check check constraint check_salary`, {}))
         .to.equal('ALTER TABLE "Persons" WITH CHECK CHECK CONSTRAINT "check_salary"');
-      expect(getParsedSql(`ALTER TABLE Persons nocheck constraint check_salary`, opt))
+      expect(getParsedSql(`ALTER TABLE Persons nocheck constraint check_salary`, {}))
         .to.equal('ALTER TABLE "Persons" NOCHECK CONSTRAINT "check_salary"');
     })
 
@@ -393,39 +384,33 @@ describe('Command SQL', () => {
     })
 
     it.skip('should support pg lock', () => {
-      const opt = {
-        database: 'sqlite'
-      }
-      expect(getParsedSql('lock table t1, t2', opt))
+      expect(getParsedSql('lock table t1, t2', {}))
         .to.equal('LOCK TABLE "t1", "t2"');
-      expect(getParsedSql('lock table t1, t2 in row share mode', opt))
+      expect(getParsedSql('lock table t1, t2 in row share mode', {}))
         .to.equal('LOCK TABLE "t1", "t2" IN ROW SHARE MODE');
-      expect(getParsedSql('lock table t1, t2 in row share mode nowait', opt))
+      expect(getParsedSql('lock table t1, t2 in row share mode nowait', {}))
         .to.equal('LOCK TABLE "t1", "t2" IN ROW SHARE MODE NOWAIT');
     })
   })
 
   describe('declare in tsql', () => {
-    const opt = {
-      database: 'sqlite'
-    }
     it.skip('should support declare variables', () => {
-      expect(getParsedSql('DECLARE @find varchar(30)', opt))
+      expect(getParsedSql('DECLARE @find varchar(30)', {}))
           .to.equal('DECLARE @find VARCHAR(30)');
-      expect(getParsedSql("DECLARE @find varchar(30) = 'Man%'", opt))
+      expect(getParsedSql("DECLARE @find varchar(30) = 'Man%'", {}))
           .to.equal("DECLARE @find VARCHAR(30) = 'Man%'");
-      expect(getParsedSql('DECLARE @Group nvarchar(50), @Sales money', opt))
+      expect(getParsedSql('DECLARE @Group nvarchar(50), @Sales money', {}))
           .to.equal('DECLARE @Group NVARCHAR(50), @Sales MONEY');
     })
 
     it.skip('should support declare variables', () => {
-      const ast = parser.astify('DECLARE @find varchar(30)', opt);
+      const ast = parser.astify('DECLARE @find varchar(30)', {});
       ast.declare[0].keyword = null
-      expect(parser.sqlify(ast, opt)).to.equal('DECLARE @find')
+      expect(parser.sqlify(ast, {})).to.equal('DECLARE @find')
     })
 
     it.skip('should support declare cursor', () => {
-      expect(getParsedSql('DECLARE @find CURSOR', opt))
+      expect(getParsedSql('DECLARE @find CURSOR', {}))
           .to.equal('DECLARE @find CURSOR');
     })
 
@@ -434,7 +419,7 @@ describe('Command SQL', () => {
         EmpID int NOT NULL,
         OldVacationHours int,
         NewVacationHours int,
-        ModifiedDate datetime);`, opt))
+        ModifiedDate datetime);`, {}))
           .to.equal('DECLARE @MyTableVar TABLE ([EmpID] INT NOT NULL, [OldVacationHours] INT, [NewVacationHours] INT, [ModifiedDate] DATETIME)');
     })
 
@@ -443,7 +428,7 @@ describe('Command SQL', () => {
       INSERT INTO quiz
       (name, max_attempts, num_questions, passing_score)
       VALUES ('Class Quiz', 3, 10, 70);
-      SELECT @QuizID = (SELECT SCOPE_IDENTITY());`, opt))
+      SELECT @QuizID = (SELECT SCOPE_IDENTITY());`, {}))
           .to.equal("DECLARE @QuizID BIGINT ; INSERT INTO [quiz] (name, max_attempts, num_questions, passing_score) VALUES ('Class Quiz',3,10,70) ; SELECT [@QuizID] = (SELECT SCOPE_IDENTITY())");
     })
   })
@@ -456,10 +441,9 @@ describe('Command SQL', () => {
     })
 
     it('should support drop index for tsql', () => {
-      const opt = { database: 'sqlite' }
-      expect(getParsedSql('DROP INDEX IX_NAME ON TABLE_NAME;', opt)).to.equal('DROP INDEX "IX_NAME" ON "TABLE_NAME"')
-      expect(getParsedSql('DROP INDEX abc.IX_NAME ON TABLE_NAME algorithm inplace;', opt)).to.equal('DROP INDEX "abc"."IX_NAME" ON "TABLE_NAME" ALGORITHM INPLACE')
-      expect(getParsedSql('DROP INDEX abc.IX_NAME ON TABLE_NAME algorithm = copy lock SHARED;', opt)).to.equal('DROP INDEX "abc"."IX_NAME" ON "TABLE_NAME" ALGORITHM = COPY LOCK SHARED')
+      expect(getParsedSql('DROP INDEX IX_NAME ON TABLE_NAME;', {})).to.equal('DROP INDEX "IX_NAME" ON "TABLE_NAME"')
+      expect(getParsedSql('DROP INDEX abc.IX_NAME ON TABLE_NAME algorithm inplace;', {})).to.equal('DROP INDEX "abc"."IX_NAME" ON "TABLE_NAME" ALGORITHM INPLACE')
+      expect(getParsedSql('DROP INDEX abc.IX_NAME ON TABLE_NAME algorithm = copy lock SHARED;', {})).to.equal('DROP INDEX "abc"."IX_NAME" ON "TABLE_NAME" ALGORITHM = COPY LOCK SHARED')
     })
   })
 

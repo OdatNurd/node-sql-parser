@@ -22,13 +22,14 @@ function constraintDefinitionToSQL(constraintDefinition) {
     with_values: withValues,
   } = constraintDefinition
   const constraintSQL = []
-  const { database } = getParserOpt()
   constraintSQL.push(toUpper(keyword))
   constraintSQL.push(identifierToSql(constraint))
   let constraintTypeStr = toUpper(constraintType)
-  if (database.toLowerCase() === 'sqlite' && constraintTypeStr === 'UNIQUE KEY') constraintTypeStr = 'UNIQUE'
+  // if (database.toLowerCase() === 'sqlite' && constraintTypeStr === 'UNIQUE KEY') constraintTypeStr = 'UNIQUE'
+  if (constraintTypeStr === 'UNIQUE KEY') constraintTypeStr = 'UNIQUE'
   constraintSQL.push(constraintTypeStr)
-  constraintSQL.push(database.toLowerCase() !== 'sqlite' && identifierToSql(index))
+  // constraintSQL.push(database.toLowerCase() !== 'sqlite' && identifierToSql(index))
+  constraintSQL.push(false)
   constraintSQL.push(...indexTypeAndOptionToSQL(constraintDefinition))
   constraintSQL.push(...columnReferenceDefinitionToSQL(referenceDefinition))
   constraintSQL.push(toUpper(enforced))

@@ -39,22 +39,13 @@ describe('util function test', () => {
     expect(comment).to.equal("COMMENT = '123'")
   })
 
-  it('should support default back quote', () => {
-    setParserOpt({"database": "default"})
-    expect(identifierToSql('db')).to.be.equal('`db`')
-    setParserOpt({})
-    expect(identifierToSql('db')).to.be.equal('`db`')
-  })
-
   it('should support columnIdentifierToSql without ident', () => {
     expect(columnIdentifierToSql()).to.be.undefined
-    setParserOpt({"database": "db2"})
     expect(columnIdentifierToSql("id")).to.be.equal('"id"')
   })
 
   it('should support trim query option', () => {
     const opt = {
-      "database": "sqlite",
       "parseOptions": {
         "includeLocations": false
       },

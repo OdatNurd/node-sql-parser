@@ -14,7 +14,6 @@ import { collateToSQL } from './collate'
 // }
 
 const DEFAULT_OPT = {
-  database     : PARSER_NAME || 'sqlite',
   type         : 'table',
   trimQuery    : true,
   parseOptions : {
@@ -129,26 +128,27 @@ function topToSQL(opt) {
 }
 
 function columnIdentifierToSql(ident) {
-  const { database } = getParserOpt()
   if (!ident) return
-  switch (database && database.toLowerCase()) {
-    case 'athena':
-    case 'db2':
-    case 'postgresql':
-    case 'redshift':
-    case 'snowflake':
-    case 'noql':
-    case 'trino':
-    case 'sqlite':
-      return `"${ident}"`
-    case 'transactsql':
-      return `[${ident}]`
-    case 'mysql':
-    case 'mariadb':
-    case 'bigquery':
-    default:
-      return `\`${ident}\``
-  }
+  return `"${ident}"`
+
+  // switch (database && database.toLowerCase()) {
+  //   case 'athena':
+  //   case 'db2':
+  //   case 'postgresql':
+  //   case 'redshift':
+  //   case 'snowflake':
+  //   case 'noql':
+  //   case 'trino':
+  //   case 'sqlite':
+  //     return `"${ident}"`
+  //   case 'transactsql':
+  //     return `[${ident}]`
+  //   case 'mysql':
+  //   case 'mariadb':
+  //   case 'bigquery':
+  //   default:
+  //     return `\`${ident}\``
+  // }
 }
 
 function identifierToSql(ident, isDual, surround) {
@@ -156,27 +156,28 @@ function identifierToSql(ident, isDual, surround) {
   if (!ident) return
   if (ident === '*') return ident
   if (surround) return `${surround}${ident}${surround}`
-  const { database } = getParserOpt()
-  switch (database && database.toLowerCase()) {
-    case 'mysql':
-    case 'mariadb':
-      return `\`${ident}\``
-    case 'athena':
-    case 'postgresql':
-    case 'redshift':
-    case 'snowflake':
-    case 'trino':
-    case 'noql':
-    case 'sqlite':
-      return `"${ident}"`
-    case 'transactsql':
-      return `[${ident}]`
-    case 'bigquery':
-    case 'db2':
-      return ident
-    default:
-      return `\`${ident}\``
-  }
+  return `"${ident}"`
+
+  // switch (database && database.toLowerCase()) {
+  //   case 'mysql':
+  //   case 'mariadb':
+  //     return `\`${ident}\``
+  //   case 'athena':
+  //   case 'postgresql':
+  //   case 'redshift':
+  //   case 'snowflake':
+  //   case 'trino':
+  //   case 'noql':
+  //   case 'sqlite':
+  //     return `"${ident}"`
+  //   case 'transactsql':
+  //     return `[${ident}]`
+  //   case 'bigquery':
+  //   case 'db2':
+  //     return ident
+  //   default:
+  //     return `\`${ident}\``
+  // }
 }
 
 function toUpper(val) {
@@ -356,13 +357,13 @@ function commonKeywordArgsToSQL(kwArgs) {
 function autoIncrementToSQL(autoIncrement) {
   if (!autoIncrement) return
   if (typeof autoIncrement === 'string') {
-    const { database } = getParserOpt()
-    switch (database && database.toLowerCase()) {
-      case 'sqlite':
-        return 'AUTOINCREMENT'
-      default:
-        return 'AUTO_INCREMENT'
-    }
+    return "AUTOINCREMENT";
+    // switch (database && database.toLowerCase()) {
+    //   case 'sqlite':
+    //     return 'AUTOINCREMENT'
+    //   default:
+    //     return 'AUTO_INCREMENT'
+    // }
   }
   const { keyword, seed, increment, parentheses } = autoIncrement
   let result = toUpper(keyword)

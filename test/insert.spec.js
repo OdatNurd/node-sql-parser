@@ -129,7 +129,7 @@ describe('insert', () => {
 
     it.skip('should support parse hive sql insert from select', () => {
       const sql = 'INSERT overwrite table account select col_a, col_b from t2'
-      const ast = parser.astify(sql, { database: 'sqlite' })
+      const ast = parser.astify(sql, {  })
       const backSQL = parser.sqlify(ast)
       expect(backSQL).to.be.equal('INSERT OVERWRITE TABLE "account" SELECT "col_a", "col_b" FROM "t2"')
     })
@@ -172,18 +172,17 @@ describe('insert', () => {
 
     it.skip('should support parse insert partition for hive', () => {
       const sql = 'INSERT overwrite table account partition(date, id) select * from tmp'
-      const ast = parser.astify(sql, { database: 'sqlite' })
+      const ast = parser.astify(sql, {  })
       const backSQL = parser.sqlify(ast)
       expect(backSQL).to.be.equal('INSERT OVERWRITE TABLE "account" PARTITION("date", "id") SELECT * FROM "tmp"')
     })
 
     it('should support parse pg insert returning', () => {
       const sql = 'INSERT into account (date, id) values("2019-12-23", 123) returning id'
-      const opt = { database: 'sqlite' }
-      const ast = parser.astify(sql, opt)
-      const backSQL = parser.sqlify(ast, opt)
+      const ast = parser.astify(sql, {})
+      const backSQL = parser.sqlify(ast, {})
       expect(backSQL).to.be.equal('INSERT INTO "account" (date, id) VALUES ("2019-12-23",123) RETURNING "id"')
-      expect(parser.sqlify(parser.astify(`INSERT INTO account (date, id) VALUES ("2019-12-23",123) RETURNING *`, opt), opt)).to.be.equal('INSERT INTO "account" (date, id) VALUES ("2019-12-23",123) RETURNING *')
+      expect(parser.sqlify(parser.astify(`INSERT INTO account (date, id) VALUES ("2019-12-23",123) RETURNING *`, {}), {})).to.be.equal('INSERT INTO "account" (date, id) VALUES ("2019-12-23",123) RETURNING *')
     })
 
     it('should support insert hex value', () => {
