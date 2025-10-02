@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - core-js
+  - core-js-pure
+  - es5-ext
+  - nodent-runtime
+  - pre-commit
+  - spawn-sync

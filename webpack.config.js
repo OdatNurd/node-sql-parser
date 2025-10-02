@@ -59,7 +59,6 @@ const getPlugins = (parserName, target, plugins = []) => {
         patterns: [
           'LICENSE',
           'lib',
-          'README.md',
           'package.json',
           'types.d.ts',
           'ast/**',
@@ -83,7 +82,6 @@ const getPlugins = (parserName, target, plugins = []) => {
         ]
         fileConfig.events.onEnd.move = [
           { source: `${outputPath}/index.umd.js`, destination: `${outputPath}/umd/index.umd.js` },
-          { source: `${outputPath}/index.umd.d.ts`, destination: `${outputPath}/umd/index.umd.d.ts` },
           { source: `${outputPath}/index.umd.js.map`, destination: `${outputPath}/umd/index.umd.js.map` },
         ]
       }
@@ -91,7 +89,6 @@ const getPlugins = (parserName, target, plugins = []) => {
     } else {
       if (target === 'node') fileConfig.events.onEnd.move = getCopyFile(parserName)
       if (target === 'web') fileConfig.events.onEnd.move = [
-        { source: `${outputPath}/${parserName}.umd.d.ts`, destination: `${outputPath}/umd/${parserName}.umd.d.ts` },
         { source: `${outputPath}/${parserName}.umd.js`, destination: `${outputPath}/umd/${parserName}.umd.js` },
         { source: `${outputPath}/${parserName}.umd.js.map`, destination: `${outputPath}/umd/${parserName}.umd.js.map` },
       ]
