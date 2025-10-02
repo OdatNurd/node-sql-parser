@@ -14,7 +14,7 @@ import { collateToSQL } from './collate'
 // }
 
 const DEFAULT_OPT = {
-  database     : PARSER_NAME || 'mysql',
+  database     : PARSER_NAME || 'sqlite',
   type         : 'table',
   trimQuery    : true,
   parseOptions : {

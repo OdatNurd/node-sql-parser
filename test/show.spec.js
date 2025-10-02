@@ -22,11 +22,11 @@ describe('SHOW COMMAND', () => {
     let sql = `${prefix} in 'abc'`
     expect(getParsedSql(sql)).to.be.equal(`${prefix} IN 'abc'`)
     sql = `${prefix} in 'abc' from def`
-    expect(getParsedSql(sql)).to.be.equal(`${prefix} IN 'abc' FROM \`def\``)
+    expect(getParsedSql(sql)).to.be.equal(`${prefix} IN 'abc' FROM "def"`)
     sql = `${prefix} in 'abc' from def limit 0,10`
-    expect(getParsedSql(sql)).to.be.equal(`${prefix} IN 'abc' FROM \`def\` LIMIT 0, 10`)
+    expect(getParsedSql(sql)).to.be.equal(`${prefix} IN 'abc' FROM "def" LIMIT 0, 10`)
     sql = `${prefix} from def limit 0,10`
-    expect(getParsedSql(sql)).to.be.equal(`${prefix} FROM \`def\` LIMIT 0, 10`)
+    expect(getParsedSql(sql)).to.be.equal(`${prefix} FROM "def" LIMIT 0, 10`)
   });
 
   ['CHARACTER SET', 'COLLATION'].forEach(type => {
@@ -36,7 +36,7 @@ describe('SHOW COMMAND', () => {
       let sql = `${prefix} like 'latin%'`
       expect(getParsedSql(sql)).to.be.equal(`${prefix} LIKE 'latin%'`)
       sql = `${prefix} where Charset = 'latin1' `
-      expect(getParsedSql(sql)).to.be.equal(`${prefix} WHERE \`Charset\` = 'latin1'`)
+      expect(getParsedSql(sql)).to.be.equal(`${prefix} WHERE "Charset" = 'latin1'`)
     })
   })
 

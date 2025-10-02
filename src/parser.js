@@ -28,7 +28,7 @@ class Parser {
   }
 
   parse(sql, opt = DEFAULT_OPT) {
-    const { database = (PARSER_NAME || 'mysql') } = opt
+    const { database = (PARSER_NAME || 'sqlite') } = opt
     setParserOpt(opt)
     const typeCase = database.toLowerCase()
     if (parsers[typeCase]) return parsers[typeCase](opt.trimQuery === false ? sql : sql.trim(), opt.parseOptions || DEFAULT_OPT.parseOptions)

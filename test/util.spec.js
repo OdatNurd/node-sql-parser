@@ -54,7 +54,7 @@ describe('util function test', () => {
 
   it('should support trim query option', () => {
     const opt = {
-      "database": "mysql",
+      "database": "sqlite",
       "parseOptions": {
         "includeLocations": false
       },
@@ -62,7 +62,7 @@ describe('util function test', () => {
     }
     const sql = "select id from tableName "
     const ast = parser.astify(sql, opt)
-    expect(parser.sqlify(ast, opt)).to.be.equal('SELECT `id` FROM `tableName`')
+    expect(parser.sqlify(ast, opt)).to.be.equal('SELECT "id" FROM "tableName"')
   })
 
   it('should sqlify backticks_quote_string', () => {

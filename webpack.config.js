@@ -13,8 +13,6 @@ const outputPath = path.join(__dirname, subDir)
 const srcPath = path.join(__dirname, 'src')
 require('rimraf').sync(outputPath)
 
-if (isProd) require('./typegen')
-
 const moduleCfg = {
     rules: [
         {
@@ -44,7 +42,6 @@ const getCopyFile = (database) => {
     return [
         { source: `${outputPath}/${database}.js`, destination: `${outputPath}/build/${database}.js` },
         { source: `${outputPath}/${database}.js.map`, destination: `${outputPath}/build/${database}.js.map` },
-        { source: `${outputPath}/${database}.d.ts`, destination: `${outputPath}/build/${database}.d.ts` },
     ]
 }
 
@@ -53,19 +50,12 @@ const getSrcFile = () => fs.readdirSync(srcPath).filter(name => name !== 'parser
 const getPlugins = (parserName, target, plugins = []) => {
   const pluginList = [new webpack.DefinePlugin({ PARSER_NAME: parserName ? JSON.stringify(parserName) : 'null' }), ...plugins]
   if (isProd) {
-    const tsFileName = (parserName || 'index') + (target === 'web' ? '.umd' : '') + '.d.ts'
     pluginList.push(
       new CopyPlugin({
         patterns: [
           'LICENSE',
           'lib',
-          'package.json',
-          'types.d.ts',
-          'ast/**',
-          {
-            from: 'index.d.ts',
-            to: tsFileName,
-          }
+          'package.json'
         ],
       }),
     )

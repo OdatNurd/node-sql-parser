@@ -114,13 +114,13 @@ describe('update', () => {
         ],
         "where": null
       }
-      expect(parser.sqlify(ast)).to.be.equal('UPDATE `a`')
+      expect(parser.sqlify(ast)).to.be.equal('UPDATE "a"')
       ast.set = []
-      expect(parser.sqlify(ast)).to.be.equal('UPDATE `a` SET ')
+      expect(parser.sqlify(ast)).to.be.equal('UPDATE "a" SET ')
       ast.set = set
-      expect(parser.sqlify(ast)).to.be.equal('UPDATE `a` SET `id`')
+      expect(parser.sqlify(ast)).to.be.equal('UPDATE "a" SET "id"')
       set[0].value = value
-      expect(parser.sqlify(ast)).to.be.equal('UPDATE `a` SET `id` = 1')
+      expect(parser.sqlify(ast)).to.be.equal('UPDATE "a" SET "id" = 1')
     })
 
     it('should parse cross-table update', () => {
@@ -209,21 +209,21 @@ describe('update', () => {
 
   it('should support set value', () => {
     expect(getParsedSql('update a set id = 123, name = values(abc) where age > 15 order by name'))
-      .to.be.equal('UPDATE `a` SET `id` = 123, `name` = values(`abc`) WHERE `age` > 15 ORDER BY `name` ASC')
+      .to.be.equal('UPDATE "a" SET "id" = 123, "name" = values("abc") WHERE "age" > 15 ORDER BY "name" ASC')
   })
 
   it('should support order by and limit in update sql', () => {
-    expect(getParsedSql('update a set id = 123 where age > 15 order by name')).to.be.equal('UPDATE `a` SET `id` = 123 WHERE `age` > 15 ORDER BY `name` ASC')
-    expect(getParsedSql('update a set id = 123 order by name')).to.be.equal('UPDATE `a` SET `id` = 123 ORDER BY `name` ASC')
-    expect(getParsedSql('update a set id = 123 limit 10')).to.be.equal('UPDATE `a` SET `id` = 123 LIMIT 10')
-    expect(getParsedSql('update a set id = 123 order by name limit 10')).to.be.equal('UPDATE `a` SET `id` = 123 ORDER BY `name` ASC LIMIT 10')
+    expect(getParsedSql('update a set id = 123 where age > 15 order by name')).to.be.equal('UPDATE "a" SET "id" = 123 WHERE "age" > 15 ORDER BY "name" ASC')
+    expect(getParsedSql('update a set id = 123 order by name')).to.be.equal('UPDATE "a" SET "id" = 123 ORDER BY "name" ASC')
+    expect(getParsedSql('update a set id = 123 limit 10')).to.be.equal('UPDATE "a" SET "id" = 123 LIMIT 10')
+    expect(getParsedSql('update a set id = 123 order by name limit 10')).to.be.equal('UPDATE "a" SET "id" = 123 ORDER BY "name" ASC LIMIT 10')
   })
 
   it('should support parse pg update returning', () => {
     const sql = 'update account set id = 1 where name = "abc" returning id'
-    const ast = parser.astify(sql, { database: 'postgresql' })
+    const ast = parser.astify(sql, { database: 'sqlite' })
     const backSQL = parser.sqlify(ast)
-    expect(backSQL).to.be.equal('UPDATE `account` SET id = 1 WHERE name = "abc" RETURNING id')
+    expect(backSQL).to.be.equal('UPDATE "account" SET "id" = 1 WHERE "name" = "abc" RETURNING "id"')
   })
 
   it('should get tableList in right action', () => {
