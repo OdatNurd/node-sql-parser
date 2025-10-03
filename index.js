@@ -1,5 +1,5 @@
-import Parser from './src/parser'
-import * as util from './src/util'
+import Parser from './src/parser.js'
+import * as util from './src/util.js'
 
 export {
   Parser,

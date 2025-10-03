@@ -1,6 +1,6 @@
-import { exprToSQL } from './expr'
-import { tableToSQL } from './tables'
-import { hasVal, toUpper } from './util'
+import { exprToSQL } from './expr.js'
+import { tableToSQL } from './tables.js'
+import { hasVal, toUpper } from './util.js'
 
 function execVariablesToSQL(stmt) {
   const { name, value } = stmt

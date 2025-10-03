@@ -1,9 +1,9 @@
-import { columnsToSQL } from './column'
-import { exprToSQL, orderOrPartitionByToSQL } from './expr'
-import { limitToSQL } from './limit'
-import { tablesToSQL } from './tables'
-import { commonOptionConnector, hasVal, returningToSQL } from './util'
-import { withToSQL } from './with'
+import { columnsToSQL } from './column.js'
+import { exprToSQL, orderOrPartitionByToSQL } from './expr.js'
+import { limitToSQL } from './limit.js'
+import { tablesToSQL } from './tables.js'
+import { commonOptionConnector, hasVal, returningToSQL } from './util.js'
+import { withToSQL } from './with.js'
 
 function deleteToSQL(stmt) {
   const { columns, from, table, where, orderby, with: withInfo, limit, returning } = stmt

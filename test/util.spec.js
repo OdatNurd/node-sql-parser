@@ -1,6 +1,6 @@
-const { expect } = require('chai')
-const Parser = require('../src/parser').default
-const {
+import { expect } from 'chai';
+import { Parser } from '../output/sql-parser.js';
+import {
   columnIdentifierToSql,
   createValueExpr,
   createBinaryExpr,
@@ -8,8 +8,8 @@ const {
   commentToSQL,
   identifierToSql,
   setParserOpt,
-} = require('../src/util')
-const { overToSQL } = require('../src/over')
+} from '../src/util.js';
+import { overToSQL } from '../src/over.js';
 
 describe('util function test', () => {
   const parser = new Parser()

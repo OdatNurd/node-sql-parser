@@ -1,9 +1,9 @@
-import { binaryToSQL } from './binary'
-import { columnRefToSQL } from './column'
-import { exprToSQL } from './expr'
-import { valuesToSQL } from './insert'
-import { intervalToSQL } from './interval'
-import { commonOptionConnector, commonTypeValue, hasVal, identifierToSql, literalToSQL, toUpper } from './util'
+import { binaryToSQL } from './binary.js'
+import { columnRefToSQL } from './column.js'
+import { exprToSQL } from './expr.js'
+import { valuesToSQL } from './insert.js'
+import { intervalToSQL } from './interval.js'
+import { commonOptionConnector, commonTypeValue, hasVal, identifierToSql, literalToSQL, toUpper } from './util.js'
 
 function unnestToSQL(unnestExpr) {
   const { type, as, expr, with_offset: withOffset } = unnestExpr

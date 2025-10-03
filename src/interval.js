@@ -1,5 +1,5 @@
-import { toUpper, hasVal } from './util'
-import { exprToSQL } from './expr'
+import { toUpper, hasVal } from './util.js'
+import { exprToSQL } from './expr.js'
 
 function intervalToSQL(intervalExpr) {
   const { expr, unit, suffix } = intervalExpr

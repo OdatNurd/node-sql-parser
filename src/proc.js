@@ -1,6 +1,6 @@
-import { assignToSQL } from './assign'
-import { exprToSQL } from './expr'
-import { toUpper } from './util'
+import { assignToSQL } from './assign.js'
+import { exprToSQL } from './expr.js'
+import { toUpper } from './util.js'
 
 function returnToSQL(stmt) {
   const { type, expr } = stmt

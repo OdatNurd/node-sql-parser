@@ -1,12 +1,12 @@
-import { alterToSQL } from './alter'
-import { analyzeToSQL, attachToSQL } from './analyze'
-import { createToSQL } from './create'
-import { commentOnToSQL } from './comment'
-import { explainToSQL } from './explain'
-import { selectToSQL } from './select'
-import { deleteToSQL } from './delete'
-import { updateToSQL } from './update'
-import { insertToSQL } from './insert'
+import { alterToSQL } from './alter.js'
+import { analyzeToSQL, attachToSQL } from './analyze.js'
+import { createToSQL } from './create.js'
+import { commentOnToSQL } from './comment.js'
+import { explainToSQL } from './explain.js'
+import { selectToSQL } from './select.js'
+import { deleteToSQL } from './delete.js'
+import { updateToSQL } from './update.js'
+import { insertToSQL } from './insert.js'
 import {
   callToSQL,
   commonCmdToSQL,
@@ -22,15 +22,15 @@ import {
   renameToSQL,
   setVarToSQL,
   lockUnlockToSQL,
-} from './command'
-import { execToSQL } from './exec'
-import { orderOrPartitionByToSQL } from './expr'
-import { limitToSQL } from './limit'
-import { loadDataToSQL } from './load'
-import { procToSQL } from './proc'
-import { transactionToSQL } from './transaction'
-import { showToSQL } from './show'
-import { hasVal, toUpper } from './util'
+} from './command.js'
+import { execToSQL } from './exec.js'
+import { orderOrPartitionByToSQL } from './expr.js'
+import { limitToSQL } from './limit.js'
+import { loadDataToSQL } from './load.js'
+import { procToSQL } from './proc.js'
+import { transactionToSQL } from './transaction.js'
+import { showToSQL } from './show.js'
+import { hasVal, toUpper } from './util.js'
 
 const typeToSQLFn = {
   alter       : alterToSQL,

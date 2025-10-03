@@ -1,6 +1,6 @@
-import { columnRefToSQL } from './column'
-import { exprToSQL } from './expr'
-import { commonOptionConnector, identifierToSql, literalToSQL } from './util'
+import { columnRefToSQL } from './column.js'
+import { exprToSQL } from './expr.js'
+import { commonOptionConnector, identifierToSql, literalToSQL } from './util.js'
 
 /**
  * @param {Array<Object>} withExpr

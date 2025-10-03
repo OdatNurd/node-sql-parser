@@ -1,4 +1,4 @@
-import { unionToSQL, multipleToSQL } from './union'
+import { unionToSQL, multipleToSQL } from './union.js'
 
 const supportedTypes = ['analyze', 'attach', 'select', 'deallocate', 'delete', 'exec', 'update', 'insert', 'drop', 'rename', 'truncate', 'call', 'desc', 'use', 'alter', 'set', 'create', 'lock', 'unlock', 'declare', 'show', 'replace', 'if', 'grant', 'revoke', 'proc', 'raise', 'execute', 'transaction', 'explain', 'comment', 'load_data']
 

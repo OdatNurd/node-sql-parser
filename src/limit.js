@@ -1,5 +1,5 @@
-import { connector, toUpper, hasVal, literalToSQL } from './util'
-import { exprToSQL } from './expr'
+import { connector, toUpper, hasVal, literalToSQL } from './util.js'
+import { exprToSQL } from './expr.js'
 
 function composePrefixValSuffix(stmt) {
   if (!stmt) return []

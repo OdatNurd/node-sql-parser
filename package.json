@@ -2,15 +2,11 @@
   "name": "node-sql-parser",
   "version": "5.3.12",
   "description": "simple node sql parser",
-  "main": "index.js",
+  "main": "dist/sql-parser.js",
+  "type": "module",
   "scripts": {
-    "start": "webpack --config webpack.config.js",
-    "build": "node build.js && pnpm compile && webpack --config webpack.config.js --mode production",
-    "build:sqlite": "rollup -c",
-    "test": "mochapack --reporter-option maxDiffSize=1000000 \"test/**/*.spec.js\"",
-    "test:sqlite": "mochapack --reporter-option maxDiffSize=1000000 \"test/sqlite.rollup.spec.js\"",
-    "compile": "babel src -d lib",
-    "release": "pnpm build && npm publish output/prod"
+    "build": "rollup -c",
+    "test": "mocha \"test/**/*.spec.js\""
   },
   "repository": {
     "type": "git",
@@ -48,32 +44,17 @@
     "node": ">=8"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
-    "@babel/register": "^7.10.5",
     "@rollup/plugin-alias": "^5.1.1",
-    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-replace": "^6.0.2",
-    "@rollup/pluginutils": "^5.2.0",
-    "babel-loader": "^8.1.0",
+    "@rollup/pluginutils": "^5.3.0",
     "browserify": "^17.0.0",
     "chai": "^4.4.1",
-    "copy-webpack-plugin": "^6.0.3",
-    "filemanager-webpack-plugin": "^3.1.1",
     "mocha": "^10.0.0",
-    "mochapack": "^2.0.3",
     "peggy": "^5.0.6",
-    "rimraf": "^5.0.1",
-    "rollup": "^4.48.1",
+    "rollup": "^4.52.4",
     "source-map-support": "^0.5.19",
-    "tinyify": "^4.0.0",
-    "vscode-mocha-hmr": "^1.0.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^4.7.0",
-    "webpack-node-externals": "^3.0.0"
+    "tinyify": "^4.0.0"
   },
   "dependencies": {
     "big-integer": "^1.6.48"

@@ -1,6 +1,6 @@
-import { hasVal, toUpper } from './util'
-import { exprToSQL, orderOrPartitionByToSQL } from './expr'
-import { overToSQL } from './over'
+import { hasVal, toUpper } from './util.js'
+import { exprToSQL, orderOrPartitionByToSQL } from './expr.js'
+import { overToSQL } from './over.js'
 
 function windowFrameExprToSQL(windowFrameExpr) {
   if (!windowFrameExpr) return

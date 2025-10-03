@@ -1,5 +1,5 @@
-import { exprToSQL } from './expr'
-import { hasVal, literalToSQL, toUpper } from './util'
+import { exprToSQL } from './expr.js'
+import { hasVal, literalToSQL, toUpper } from './util.js'
 
 function collateToSQL(stmt) {
   if (!stmt) return

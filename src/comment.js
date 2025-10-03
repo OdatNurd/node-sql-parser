@@ -1,5 +1,5 @@
-import { columnRefToSQL } from './column'
-import { hasVal, identifierToSql, literalToSQL, toUpper } from './util'
+import { columnRefToSQL } from './column.js'
+import { hasVal, identifierToSql, literalToSQL, toUpper } from './util.js'
 
 function commentOptionToSQL(stmt) {
   const { name, type } = stmt

@@ -1,7 +1,8 @@
-const { expect } = require('chai');
-const Parser = require('../src/parser').default
-const { indexOptionToSQL, indexTypeAndOptionToSQL } = require('../src/index-definition')
-const { columnOrderListToSQL } = require('../src/util')
+import { expect } from 'chai';
+import { Parser } from '../output/sql-parser.js';
+
+import { indexOptionToSQL, indexTypeAndOptionToSQL } from '../src/index-definition.js';
+import { columnOrderListToSQL } from '../src/util.js';
 
 describe('create', () => {
   const parser = new Parser();

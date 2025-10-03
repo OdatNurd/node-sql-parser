@@ -1,8 +1,8 @@
-import { columnToSQL, getDual } from './column'
-import { exprToSQL } from './expr'
-import sqliteParser from '../build/sqlite.js'
-import astToSQL from './sql'
-import { DEFAULT_OPT, setParserOpt } from './util'
+import { columnToSQL, getDual } from './column.js'
+import { exprToSQL } from './expr.js'
+import * as sqliteParser from '../pegjs/sqlite.pegjs'
+import astToSQL from './sql.js'
+import { DEFAULT_OPT, setParserOpt } from './util.js'
 
 class Parser {
   astify(sql, opt = DEFAULT_OPT) {

@@ -1,9 +1,9 @@
-import { tablesToSQL } from './tables'
-import { exprToSQL } from './expr'
-import { columnRefToSQL } from './column'
-import { identifierToSql, commonOptionConnector, hasVal, toUpper, returningToSQL, literalToSQL } from './util'
-import { unionToSQL } from './union'
-import { setToSQL } from './update'
+import { tablesToSQL } from './tables.js'
+import { exprToSQL } from './expr.js'
+import { columnRefToSQL } from './column.js'
+import { identifierToSql, commonOptionConnector, hasVal, toUpper, returningToSQL, literalToSQL } from './util.js'
+import { unionToSQL } from './union.js'
+import { setToSQL } from './update.js'
 
 /**
  * @param {Array} stmt

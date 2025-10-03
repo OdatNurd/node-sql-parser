@@ -1,4 +1,4 @@
-import { exprToSQL } from './expr'
+import { exprToSQL } from './expr.js'
 
 function caseToSQL(expr) {
   const res = ['CASE']

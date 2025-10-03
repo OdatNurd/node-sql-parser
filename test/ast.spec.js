@@ -1,8 +1,10 @@
-const { expect } = require('chai')
-const Parser = require('../src/parser').default
-const util = require('../src/util')
-const { varToSQL, orderOrPartitionByToSQL } = require('../src/expr')
-const { multipleToSQL } = require('../src/union')
+import { expect } from 'chai';
+import { Parser } from '../output/sql-parser.js';
+
+import * as util from '../src/util.js';
+
+import { varToSQL, orderOrPartitionByToSQL } from '../src/expr.js';
+import { multipleToSQL } from '../src/union.js';
 
 describe('AST', () => {
     const parser = new Parser();

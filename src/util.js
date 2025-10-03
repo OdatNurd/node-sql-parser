@@ -1,5 +1,5 @@
-import { columnToSQL, columnRefToSQL, columnOrderToSQL } from './column'
-import { collateToSQL } from './collate'
+import { columnToSQL, columnRefToSQL, columnOrderToSQL } from './column.js'
+import { collateToSQL } from './collate.js'
 
 // const escapeMap = {
 //   '\0'   : '\\0',

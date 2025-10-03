@@ -1,6 +1,6 @@
-import { exprToSQL, orderOrPartitionByToSQL } from './expr'
-import { hasVal, literalToSQL, toUpper } from './util'
-import { overToSQL } from './over'
+import { exprToSQL, orderOrPartitionByToSQL } from './expr.js'
+import { hasVal, literalToSQL, toUpper } from './util.js'
+import { overToSQL } from './over.js'
 
 function aggrToSQL(expr) {
   /** @type {Object} */

@@ -5,9 +5,9 @@ import {
   getParserOpt,
   hasVal,
   toUpper,
-} from './util'
-import { indexTypeAndOptionToSQL } from './index-definition'
-import { columnReferenceDefinitionToSQL } from './column'
+} from './util.js'
+import { indexTypeAndOptionToSQL } from './index-definition.js'
+import { columnReferenceDefinitionToSQL } from './column.js'
 
 function constraintDefinitionToSQL(constraintDefinition) {
   if (!constraintDefinition) return

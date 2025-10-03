@@ -1,10 +1,10 @@
-import { columnDataType, columnRefToSQL } from './column'
-import { createDefinitionToSQL } from './create'
-import { identifierToSql, hasVal, toUpper, literalToSQL } from './util'
-import { exprToSQL } from './expr'
-import { tablesToSQL, tableToSQL } from './tables'
-import astToSQL from './sql'
-import { multipleToSQL } from './union'
+import { columnDataType, columnRefToSQL } from './column.js'
+import { createDefinitionToSQL } from './create.js'
+import { identifierToSql, hasVal, toUpper, literalToSQL } from './util.js'
+import { exprToSQL } from './expr.js'
+import { tablesToSQL, tableToSQL } from './tables.js'
+import astToSQL from './sql.js'
+import { multipleToSQL } from './union.js'
 
 function callToSQL(stmt) {
   const type = 'CALL'

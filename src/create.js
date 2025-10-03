@@ -1,13 +1,13 @@
-import { alterArgsToSQL, alterExprToSQL } from './alter'
-import { exprToSQL } from './expr'
-import { indexDefinitionToSQL, indexOptionListToSQL, indexTypeToSQL } from './index-definition'
-import { columnDefinitionToSQL, columnRefToSQL } from './column'
-import { grantUserOrRoleToSQL } from './command'
-import { constraintDefinitionToSQL } from './constrain'
-import { funcToSQL } from './func'
-import { tablesToSQL, tableOptionToSQL, tableToSQL } from './tables'
-import { setToSQL } from './update'
-import { multipleToSQL, unionToSQL } from './union'
+import { alterArgsToSQL, alterExprToSQL } from './alter.js'
+import { exprToSQL } from './expr.js'
+import { indexDefinitionToSQL, indexOptionListToSQL, indexTypeToSQL } from './index-definition.js'
+import { columnDefinitionToSQL, columnRefToSQL } from './column.js'
+import { grantUserOrRoleToSQL } from './command.js'
+import { constraintDefinitionToSQL } from './constrain.js'
+import { funcToSQL } from './func.js'
+import { tablesToSQL, tableOptionToSQL, tableToSQL } from './tables.js'
+import { setToSQL } from './update.js'
+import { multipleToSQL, unionToSQL } from './union.js'
 import {
   columnIdentifierToSql,
   columnOrderListToSQL,
@@ -22,7 +22,7 @@ import {
   identifierToSql,
   triggerEventToSQL,
   literalToSQL,
-} from './util'
+} from './util.js'
 
 function createDefinitionToSQL(definition) {
   if (!definition) return []

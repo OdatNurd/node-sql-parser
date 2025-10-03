@@ -1,6 +1,6 @@
-import { columnsToSQL } from './column'
-import { exprToSQL } from './expr'
-import { arrayStructTypeToSQL, hasVal, toUpper } from './util'
+import { columnsToSQL } from './column.js'
+import { exprToSQL } from './expr.js'
+import { arrayStructTypeToSQL, hasVal, toUpper } from './util.js'
 
 function arrayExprListToSQL(expr) {
   const {

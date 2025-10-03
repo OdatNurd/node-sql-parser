@@ -1,7 +1,7 @@
-import { arrayIndexToSQL, columnOffsetToSQL } from './column'
-import { exprToSQL, orderOrPartitionByToSQL } from './expr'
-import { hasVal, identifierToSql, literalToSQL, toUpper } from './util'
-import { overToSQL } from './over'
+import { arrayIndexToSQL, columnOffsetToSQL } from './column.js'
+import { exprToSQL, orderOrPartitionByToSQL } from './expr.js'
+import { hasVal, identifierToSql, literalToSQL, toUpper } from './util.js'
+import { overToSQL } from './over.js'
 
 function anyValueFuncToSQL(stmt) {
   const { args, type, over } = stmt

@@ -1,6 +1,6 @@
-import { hasVal, toUpper } from './util'
-import { exprToSQL, orderOrPartitionByToSQL } from './expr'
-import { asWindowSpecToSQL } from './window'
+import { hasVal, toUpper } from './util.js'
+import { exprToSQL, orderOrPartitionByToSQL } from './expr.js'
+import { asWindowSpecToSQL } from './window.js'
 
 function overToSQL(over) {
   if (!over) return

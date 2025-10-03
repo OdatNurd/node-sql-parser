@@ -1,8 +1,8 @@
-import { commonOptionConnector, toUpper, hasVal, literalToSQL } from './util'
-import { partitionToSQL } from './insert'
-import { tableToSQL } from './tables'
-import { columnsToSQL } from './column'
-import { setToSQL } from './update'
+import { commonOptionConnector, toUpper, hasVal, literalToSQL } from './util.js'
+import { partitionToSQL } from './insert.js'
+import { tableToSQL } from './tables.js'
+import { columnsToSQL } from './column.js'
+import { setToSQL } from './update.js'
 
 function loadDataFields(expr) {
   if (!expr) return ''

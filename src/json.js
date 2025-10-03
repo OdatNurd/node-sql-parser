@@ -1,5 +1,5 @@
-import { exprToSQL } from './expr'
-import { toUpper } from './util'
+import { exprToSQL } from './expr.js'
+import { toUpper } from './util.js'
 
 function jsonExprToSQL(expr) {
   const { keyword, expr_list: exprList } = expr

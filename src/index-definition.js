@@ -4,8 +4,8 @@ import {
   hasVal,
   commentToSQL,
   onPartitionsToSQL,
-} from './util'
-import { exprToSQL } from './expr'
+} from './util.js'
+import { exprToSQL } from './expr.js'
 
 function indexTypeToSQL(indexType) {
   if (!indexType) return []

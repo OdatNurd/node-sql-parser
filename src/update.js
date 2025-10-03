@@ -1,9 +1,9 @@
-import { tablesToSQL } from './tables'
-import { exprToSQL, orderOrPartitionByToSQL } from './expr'
-import { columnRefToSQL } from './column'
-import { limitToSQL } from './limit'
-import { hasVal, commonOptionConnector, returningToSQL } from './util'
-import { withToSQL } from './with'
+import { tablesToSQL } from './tables.js'
+import { exprToSQL, orderOrPartitionByToSQL } from './expr.js'
+import { columnRefToSQL } from './column.js'
+import { limitToSQL } from './limit.js'
+import { hasVal, commonOptionConnector, returningToSQL } from './util.js'
+import { withToSQL } from './with.js'
 
 /**
  * @param {Array} sets

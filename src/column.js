@@ -1,8 +1,8 @@
-import { collateToSQL } from './collate'
-import { constraintDefinitionToSQL } from './constrain'
-import { exprToSQL } from './expr'
-import { arrayDimensionToSymbol, castToSQL } from './func'
-import { tablesToSQL } from './tables'
+import { collateToSQL } from './collate.js'
+import { constraintDefinitionToSQL } from './constrain.js'
+import { exprToSQL } from './expr.js'
+import { arrayDimensionToSymbol, castToSQL } from './func.js'
+import { tablesToSQL } from './tables.js'
 import {
   autoIncrementToSQL,
   columnIdentifierToSql,
@@ -15,7 +15,7 @@ import {
   identifierToSql,
   literalToSQL,
   toUpper,
-} from './util'
+} from './util.js'
 
 function columnOffsetToSQL(column, isDual) {
   if (typeof column === 'string') return identifierToSql(column, isDual)

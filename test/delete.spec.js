@@ -1,6 +1,7 @@
-const { expect } = require('chai');
-const Parser = require('../src/parser').default
-const { deleteToSQL } = require('../src/delete')
+import { expect } from 'chai';
+import { Parser } from '../output/sql-parser.js';
+
+import { deleteToSQL } from '../src/delete.js';
 
 describe('delete', () => {
     const parser = new Parser();

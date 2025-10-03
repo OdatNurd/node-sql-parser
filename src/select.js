@@ -1,10 +1,10 @@
-import { exprToSQL, getExprListSQL, orderOrPartitionByToSQL, varToSQL } from './expr'
-import { columnsToSQL } from './column'
-import { limitToSQL } from './limit'
-import { withToSQL } from './with'
-import { tablesToSQL } from './tables'
-import { hasVal, commonOptionConnector, connector, identifierToSql, topToSQL, toUpper, literalToSQL } from './util'
-import { collateToSQL } from './collate'
+import { exprToSQL, getExprListSQL, orderOrPartitionByToSQL, varToSQL } from './expr.js'
+import { columnsToSQL } from './column.js'
+import { limitToSQL } from './limit.js'
+import { withToSQL } from './with.js'
+import { tablesToSQL } from './tables.js'
+import { hasVal, commonOptionConnector, connector, identifierToSql, topToSQL, toUpper, literalToSQL } from './util.js'
+import { collateToSQL } from './collate.js'
 
 function distinctToSQL(distinct) {
   if (!distinct) return

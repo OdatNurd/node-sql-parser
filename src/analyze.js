@@ -1,6 +1,6 @@
-import { exprToSQL } from './expr'
-import { tableToSQL } from './tables'
-import { hasVal, identifierToSql, toUpper } from './util'
+import { exprToSQL } from './expr.js'
+import { tableToSQL } from './tables.js'
+import { hasVal, identifierToSql, toUpper } from './util.js'
 
 function analyzeToSQL(stmt) {
   const { type, table } = stmt

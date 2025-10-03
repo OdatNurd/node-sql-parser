@@ -1,4 +1,4 @@
-import { hasVal, literalToSQL, toUpper } from './util'
+import { hasVal, literalToSQL, toUpper } from './util.js'
 
 function transactionToSQL(stmt) {
   const { expr: { action, keyword, modes } } = stmt

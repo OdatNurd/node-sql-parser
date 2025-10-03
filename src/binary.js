@@ -1,5 +1,5 @@
-import { exprToSQL } from './expr'
-import { hasVal, toUpper } from './util'
+import { exprToSQL } from './expr.js'
+import { hasVal, toUpper } from './util.js'
 
 function binaryToSQL(expr) {
   let operator = expr.operator || expr.op

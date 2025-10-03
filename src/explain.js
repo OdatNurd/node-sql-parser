@@ -1,5 +1,5 @@
-import { selectToSQL } from './select'
-import { toUpper } from './util'
+import { selectToSQL } from './select.js'
+import { toUpper } from './util.js'
 
 function explainToSQL(stmt) {
   const { type, expr } = stmt

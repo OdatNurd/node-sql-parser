@@ -1,7 +1,7 @@
-import { exprToSQL, varToSQL } from './expr'
-import { limitToSQL } from './limit'
-import { tableToSQL, tablesToSQL } from './tables'
-import { commonOptionConnector, hasVal, literalToSQL, toUpper } from './util'
+import { exprToSQL, varToSQL } from './expr.js'
+import { limitToSQL } from './limit.js'
+import { tableToSQL, tablesToSQL } from './tables.js'
+import { commonOptionConnector, hasVal, literalToSQL, toUpper } from './util.js'
 
 function showEventToSQL(showEventExpr) {
   const { in: inClause, from , limit } = showEventExpr

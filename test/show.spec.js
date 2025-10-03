@@ -1,5 +1,5 @@
-const { expect } = require('chai')
-const Parser = require('../src/parser').default
+import { expect } from 'chai';
+import { Parser } from '../output/sql-parser.js';
 
 describe('SHOW COMMAND', () => {
   const parser = new Parser();

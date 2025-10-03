@@ -1,10 +1,10 @@
-import { columnDefinitionToSQL, columnRefToSQL, columnsToSQL } from './column'
-import { createDefinitionToSQL } from './create'
-import { indexTypeAndOptionToSQL } from './index-definition'
-import { tablesToSQL, tableToSQL } from './tables'
-import { exprToSQL } from './expr'
-import { selectToSQL } from './select'
-import { dataTypeToSQL, hasVal, toUpper, identifierToSql, literalToSQL } from './util'
+import { columnDefinitionToSQL, columnRefToSQL, columnsToSQL } from './column.js'
+import { createDefinitionToSQL } from './create.js'
+import { indexTypeAndOptionToSQL } from './index-definition.js'
+import { tablesToSQL, tableToSQL } from './tables.js'
+import { exprToSQL } from './expr.js'
+import { selectToSQL } from './select.js'
+import { dataTypeToSQL, hasVal, toUpper, identifierToSql, literalToSQL } from './util.js'
 
 function alterExprPartition(action, expr) {
   switch (action) {
